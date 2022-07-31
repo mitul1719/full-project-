@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import cogoToast from "cogo-toast";
 import useAuth from "../../hooks/useAuth.jsx";
-import {LoginMethod} from '../../API/login.api'
+import { LoginMethod } from "../../API/login.api";
+import { getDataFromResult } from "../../utils";
 
 let user = process.env.REACT_APP_USERNAME;
 let pass = process.env.REACT_APP_PASSWORD;
@@ -9,9 +10,6 @@ const Login = ({ login: _login }) => {
   const [auth, setAuth] = useState(false);
   const { login, authlogin } = useAuth();
 
-  //   function onLogin() {
-  //     login(true);
-  //   }
   async function authenticate(e) {
     e.preventDefault();
     // let username = e.target.username.value; //awesome strategy
@@ -19,14 +17,21 @@ const Login = ({ login: _login }) => {
 
     const { username, password } = e.target;
 
-
     const payLoad = {
-      username:username.value,
-      password:password.value
+      email: username.value,
+      password: password.value,
+    };
+
+    const data = await LoginMethod(payLoad);
+
+    if (data.ok) {
+      localStorage.setItem("bearer", getDataFromResult(data).access_token);
+      cogoToast.success("Successfully Logged in");
+      login();
+    } else {
+      cogoToast.error("Something unexpected occured");
     }
 
-    const data = await LoginMethod(payLoad)
-    console.log(data)
     // if (username.value === user && password.value === pass) {
     //   //   setAuth(true);
     //   login();

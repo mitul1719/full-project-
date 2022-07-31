@@ -1,4 +1,4 @@
-import React, { useState,Suspense } from "react";
+import React, { useState, Suspense } from "react";
 import "./App.css";
 import { Login, Registration } from "./components";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -24,9 +24,14 @@ function App() {
             }
           />
 
-          <Route path="/dashboard" element={<ProtectedLayout />}>
-            <Route path="home" element={<DashBoard />} />
-          </Route>
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedLayout>
+                <DashBoard />
+              </ProtectedLayout>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </div>
